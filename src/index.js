@@ -5,23 +5,26 @@ import cors from "cors";
 import morgan from "morgan";
 import routes from "./routes/index.js";
 import { createServer } from "http";
-import { Server } from "socket.io";
+import { sockets } from './sockets/sockets.js';
 
 const app = express();
-const server = createServer(app);
-const io = new Server(server);
+const server = createServer(app,{
+    cors: {
+        origin: '*',
+    }
+});
 
-app.use(cors());
+
+app.use(cors({ origin: '*'}));
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/', routes)
-io.on('connection', (socket) => {
-    console.log(socket.id)
-});
 
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => console.log(`Puerto corriendo en : ${port}`));
 //app.listen(port, () => console.log(`Puerto corriendo en : ${port}`));
+
+sockets(server);
