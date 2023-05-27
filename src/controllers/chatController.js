@@ -1,6 +1,7 @@
 import User from "../models/users.js"
 
 import { getIO } from "../sockets/sockets.js";
+import { generateTokens } from "../helpers/authHelper.js"
 
 const chat = (req, res) => {
     const io = getIO();
@@ -31,9 +32,8 @@ const login = async (req, res) => {
         if (!user) {
             return res.status(400).send({ error: "Ha ocurrido un problema" });
         }
-        
-        
-        return res.status(201).json(user)
+        const { token, refresh } = await generateTokens(user._id);
+        return res.status(201).json({user, token, refresh})
     } catch (error) {
         return res.status(400).json({ message: error.message })
     }
@@ -60,4 +60,14 @@ const message = async (req, res) => {
     }
 }
 
-export { chat, signUp, login, message }
+const refresh = async (req, res) => {
+    try {
+        const {token} = req.body;
+
+        return res.status(201).json({ token })
+    } catch (error) {
+        return res.status(400).json({ message: error.message })
+    }
+}
+
+export { chat, signUp, login, message, refresh }
