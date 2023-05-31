@@ -1,7 +1,7 @@
 import User from "../models/users.js"
 
 import { getIO } from "../sockets/sockets.js";
-import { generateTokens } from "../helpers/authHelper.js"
+
 
 const chat = (req, res) => {
     const io = getIO();
@@ -12,32 +12,6 @@ const chat = (req, res) => {
     res.status(200).send("Chat Controller");
 }
 
-const signUp = async (req, res) => {
-    try {
-        const { username, password } = req.body;
-        console.log(req.body)
-        const user = await User.create({ username, password })
-        return res.status(201).json({ message: "User created", user })
-    } catch (error) {
-        return res.status(400).json({ message: error.message })
-    }
-}
-
-const login = async (req, res) => {
-    try {
-        const { username, password } = req.body;
-        const bearerHeader = req.headers.authorization;
-        console.log(bearerHeader)
-        const user = await User.findOne({username});
-        if (!user) {
-            return res.status(400).send({ error: "Ha ocurrido un problema" });
-        }
-        const { token, refresh } = await generateTokens(user._id);
-        return res.status(201).json({user, token, refresh})
-    } catch (error) {
-        return res.status(400).json({ message: error.message })
-    }
-}
 
 const message = async (req, res) => {
     try {
@@ -60,14 +34,6 @@ const message = async (req, res) => {
     }
 }
 
-const refresh = async (req, res) => {
-    try {
-        const {token} = req.body;
 
-        return res.status(201).json({ token })
-    } catch (error) {
-        return res.status(400).json({ message: error.message })
-    }
-}
 
-export { chat, signUp, login, message, refresh }
+export { chat, message }

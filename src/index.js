@@ -6,16 +6,25 @@ import morgan from "morgan";
 import routes from "./routes/index.js";
 import { createServer } from "http";
 import { sockets } from './sockets/sockets.js';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 const server = createServer(app,{
     cors: {
         origin: '*',
-    }
+        
+    },
+    
 });
 
+app.use(cookieParser());
+app.use(
+    cors({ 
+        credentials: true,
+        origin: process.env.URL_ORIGIN,
+    }),
+    );
 
-app.use(cors({ origin: '*'}));
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
