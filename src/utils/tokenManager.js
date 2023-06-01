@@ -6,17 +6,12 @@ const generateTokens = (userId) => {
     return { token, expiresIn: process.env.JWT_EXPIRES_IN };
 }
 
-const generateRefreshToken = (userId, res) => {
+
+const generateRefreshToken = (userId) => {
     try {
         const refreshToken = jwt.sign({ userId }, process.env.REFRESH_JWT_SECRET, { expiresIn: process.env.REFRESH_JWT_EXPIRES_IN });
-        res.cookie('refreshToken', refreshToken, 
-        { 
-            //httpOnly: true, 
-            expire: new Date(Date.now() + process.env.REFRESH_JWT_EXPIRES_IN * 1000),
-            secure: false,
-            sameSite: 'none'
-        }
-        );
+        
+        return refreshToken;
     } catch (error) {
         console.log(error)
     }

@@ -15,8 +15,8 @@ const signUp = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { username, password } = req.body;
-        const bearerHeader = req.headers.authorization;
-        console.log(bearerHeader)
+        //const bearerHeader = req.headers.authorization;
+        //console.log(bearerHeader)
         const user = await User.findOne({username});
         if (!user) {
             return res.status(400).send({ error: "Ha ocurrido un problema" });
@@ -27,7 +27,15 @@ const login = async (req, res) => {
         }
 
         const { token, expiresIn } =  generateTokens(user._id);
-        generateRefreshToken(user._id, res);
+        const refreshToken = generateRefreshToken(user._id);
+        console.log('refreshToken', refreshToken)
+        res.cookie('refreshToken', refreshToken, 
+        {
+            httpOnly: true,
+            secure: process.env.MODE === 'dev' ? false : true,
+            sameSite: process.env.MODE === 'dev' ? 'lax' : 'none',
+        }
+        );
 
         return res.status(201).json({token, expiresIn})
     } catch (error) {
@@ -37,12 +45,38 @@ const login = async (req, res) => {
 
 const refresh = async (req, res) => {
     try {
-        const {token} = req.body;
+        const { token, expiresIn } = generateTokens(req.uid);
 
-        return res.status(201).json({ token })
+        return res.json({ token, expiresIn });
     } catch (error) {
-        return res.status(400).json({ message: error.message })
+        console.log(error);
+        return res.status(500).json({ error: error.message });
     }
 }
 
-export { signUp, login, refresh }
+const test = (req,res) =>{
+    try {
+        const datos = req.body
+        console.log(datos)
+        res.cookie('test', datos,
+        {
+            httpOnly: true,
+            
+        }
+        )
+        return res.status(200).json({msg: "Bienvenido a la API"})
+    } catch (error) {
+        return res.status(500).json({msg: error.message})
+    }
+}
+
+const proting = (req,res) =>{
+    try {
+        
+        return res.status(200).json({msg: "Bienvenido a la API"})
+    } catch (error) {
+        return res.status(500).json({msg: error.message})
+    }
+}
+
+export { signUp, login, refresh, test, proting }
