@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/login', login);
 router.post('/signup', signUp);
 router.post('/refresh',requireRefreshToken, refresh);
-router.get('/testing', verifyToken, proting)
+router.get('/testing', proting)
 
 router.post('/test', test)
 

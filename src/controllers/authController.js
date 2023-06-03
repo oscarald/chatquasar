@@ -17,6 +17,7 @@ const login = async (req, res) => {
         const { username, password } = req.body;
         //const bearerHeader = req.headers.authorization;
         //console.log(bearerHeader)
+        console.log(req.body)
         const user = await User.findOne({username});
         if (!user) {
             return res.status(400).send({ error: "Ha ocurrido un problema" });
@@ -36,6 +37,9 @@ const login = async (req, res) => {
             sameSite: process.env.MODE === 'dev' ? 'lax' : 'none',
         }
         );
+        //console.log('token', token)
+        //res.set({'test': `Bearer ${token}`});
+        res.set({'X-Data': token})
 
         return res.status(201).json({token, expiresIn})
     } catch (error) {
@@ -72,8 +76,10 @@ const test = (req,res) =>{
 
 const proting = (req,res) =>{
     try {
-        
-        return res.status(200).json({msg: "Bienvenido a la API"})
+        console.log(req.headers)
+        //req.headers['X-Data'] = 'valor-datos'
+        res.set({'X-Data': 'valor-datos232323'})
+        return res.status(200).json({msg: req.headers})
     } catch (error) {
         return res.status(500).json({msg: error.message})
     }

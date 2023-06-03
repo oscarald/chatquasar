@@ -12,9 +12,7 @@ const app = express();
 const server = createServer(app,{
     cors: {
         origin: '*',
-        
     },
-    
 });
 
 app.use(cookieParser());
@@ -22,6 +20,7 @@ app.use(
     cors({ 
         origin: process.env.URL_ORIGIN,
         credentials: true,
+        exposedHeaders: ['X-Data']
     }),
     );
 
@@ -30,19 +29,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/', routes)
-/* app.get("/", (req,res) =>{
-    try {
-        res.cookie('test', 'refreshToken',
-        {
-            httpOnly: true,
-            
-        }
-        )
-        return res.status(200).json({msg: "Bienvenido a la API"})
-    } catch (error) {
-        return res.status(500).json({msg: error.message})
-    }
-}) */
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => console.log(`Puerto corriendo en : ${port}`));
