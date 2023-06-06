@@ -39,9 +39,11 @@ const login = async (req, res) => {
         );
         //console.log('token', token)
         //res.set({'test': `Bearer ${token}`});
+        const now = (new Date()) 
         res.set({'X-Data': token})
+        res.set({'X-Time': now.getTime() + 1000*60*process.env.JWT_EXPIRES_IN_MINUTES})
 
-        return res.status(201).json({token, expiresIn})
+        return res.status(201).json({message: "User logged"})
     } catch (error) {
         return res.status(400).json({ message: error.message })
     }
@@ -49,9 +51,10 @@ const login = async (req, res) => {
 
 const refresh = async (req, res) => {
     try {
-        const { token, expiresIn } = generateTokens(req.uid);
+        console.log(req.uid)
+        //const { token, expiresIn } = generateTokens(req.uid);
 
-        return res.json({ token, expiresIn });
+        return res.json({msg: 'Token refrescado'});
     } catch (error) {
         console.log(error);
         return res.status(500).json({ error: error.message });
@@ -76,13 +79,14 @@ const test = (req,res) =>{
 
 const proting = (req,res) =>{
     try {
-        console.log(req.headers)
+        //console.log(req.headers)
         //req.headers['X-Data'] = 'valor-datos'
-        res.set({'X-Data': 'valor-datos232323'})
+        //res.set({'X-Data': 'valor-datos232323'})
         return res.status(200).json({msg: req.headers})
     } catch (error) {
         return res.status(500).json({msg: error.message})
     }
 }
+
 
 export { signUp, login, refresh, test, proting }

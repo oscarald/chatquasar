@@ -7,6 +7,7 @@ import routes from "./routes/index.js";
 import { createServer } from "http";
 import { sockets } from './sockets/sockets.js';
 import cookieParser from 'cookie-parser';
+import { initialConfig } from './helpers/initialConfig.js';
 
 const app = express();
 const server = createServer(app,{
@@ -20,13 +21,15 @@ app.use(
     cors({ 
         origin: process.env.URL_ORIGIN,
         credentials: true,
-        exposedHeaders: ['X-Data']
+        exposedHeaders: ['X-Data', 'X-Time']
     }),
     );
 
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+initialConfig()
 
 app.use('/', routes)
 

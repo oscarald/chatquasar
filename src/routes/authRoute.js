@@ -8,8 +8,9 @@ const router = express.Router();
 router.post('/login', login);
 router.post('/signup', signUp);
 router.post('/refresh',requireRefreshToken, refresh);
-router.get('/testing', proting)
+router.get('/testing', verifyToken, proting)
 
 router.post('/test', test)
+
 
 export default router;
