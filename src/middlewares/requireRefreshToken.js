@@ -1,6 +1,8 @@
 
 import jwt from "jsonwebtoken";
 import { generateTokens } from "../utils/tokenManager.js";
+import fs from 'fs';
+const configuration = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
 
 export const requireRefreshToken = (req, res, next) => {
     try {
@@ -12,7 +14,7 @@ export const requireRefreshToken = (req, res, next) => {
         const newToken = generateTokens(userId)
         const now = (new Date()) 
         res.set({'X-Data': newToken.token})
-        res.set({'X-Time': now.getTime()+ 1000*60*process.env.JWT_EXPIRES_IN_MINUTES})
+        res.set({'X-Time': now.getTime()+ 1000*configuration.timeToken.timeInSecond})
 
         req.uid = userId;
         next();

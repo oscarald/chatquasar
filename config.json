@@ -1,12 +1,12 @@
 {
   "timeToken": {
-    "time": 10,
-    "unitTime": "m",
-    "timeInSecond": 600
+    "time": 5,
+    "unitTime": "s",
+    "timeInSecond": 5
   },
   "timeRefreshToken": {
-    "time": 6,
+    "time": 40,
     "unitTime": "h",
-    "timeInSecond": 21600
+    "timeInSecond": 144000
   }
 }

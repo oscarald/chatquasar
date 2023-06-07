@@ -1,5 +1,7 @@
 import User from "../models/users.js"
 import { generateRefreshToken, generateTokens } from "../utils/tokenManager.js"
+import fs from 'fs';
+const configuration = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
 
 const signUp = async (req, res) => {
     try {
@@ -39,9 +41,10 @@ const login = async (req, res) => {
         );
         //console.log('token', token)
         //res.set({'test': `Bearer ${token}`});
+        console.log(configuration)
         const now = (new Date()) 
         res.set({'X-Data': token})
-        res.set({'X-Time': now.getTime() + 1000*60*process.env.JWT_EXPIRES_IN_MINUTES})
+        res.set({'X-Time': now.getTime() + 1000*configuration.timeToken.timeInSecond})
 
         return res.status(201).json({message: "User logged"})
     } catch (error) {

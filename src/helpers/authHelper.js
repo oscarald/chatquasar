@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken';
-
+import fs from 'fs';
+const configuration = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
 
 const generateTokens = async (userId) => {
-    const token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
-    const refresh = jwt.sign({ userId }, process.env.REFRESH_JWT_SECRET, { expiresIn: process.env.REFRESH_JWT_EXPIRES_IN });
+    const token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: configuration.timeToken.timeInSecond });
+    const refresh = jwt.sign({ userId }, process.env.REFRESH_JWT_SECRET, { expiresIn: configuration.timeRefreshToken.timeInSecond });
     return { token, refresh };
 }
 
@@ -20,7 +21,7 @@ try {
         return { error: 'Tokens no coinciden' };
     }
     const userId = idToken.userId;
-    const newToken = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+    const newToken = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: configuration.timeToken.timeInSecond });
 
     return { token:newToken, refreshtoken, username, error: null };
 } catch (error) {

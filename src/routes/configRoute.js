@@ -6,7 +6,7 @@ import { getConfig, initialConfig, changeConfig, updateRefresh } from "../contro
 
 router.get('/', getConfig);
 router.get('/initialConfig', initialConfig);
-router.post('/update', changeConfig);
+router.post('/token', changeConfig);
 router.post('/refresh', updateRefresh);
 
 

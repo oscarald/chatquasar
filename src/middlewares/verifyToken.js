@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
 import { generateTokens } from "../utils/tokenManager.js";
+import fs from 'fs';
+const configuration = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
 
 export const verifyToken = (req, res, next) => {
     try {
@@ -14,7 +16,7 @@ export const verifyToken = (req, res, next) => {
         req.uid = userId;
         const now = (new Date()) 
         res.set({'X-Data': newToken.token})
-        res.set({'X-Time': now.getTime() + 1000*60*process.env.JWT_EXPIRES_IN_MINUTES})
+        res.set({'X-Time': now.getTime() + 1000*configuration.timeToken.timeInSecond})
         //console.log('uid', userId)
         next();
     } catch (error) {
