@@ -9,6 +9,8 @@ import { sockets } from './sockets/sockets.js';
 import cookieParser from 'cookie-parser';
 import { initialConfig } from './helpers/initialConfig.js';
 
+
+
 const app = express();
 const server = createServer(app,{
     cors: {
